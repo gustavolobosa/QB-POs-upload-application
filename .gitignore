@@ -1,2 +1,4 @@
 __pycache__
 quickbooksVenv
+.env
+config.txt
