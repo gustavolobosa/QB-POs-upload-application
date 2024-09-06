@@ -2,3 +2,8 @@ __pycache__
 quickbooksVenv
 .env
 config.txt
+dist
+output
+tkdnd
+tkinterdnd2
+tkinterdnd2-0.3.0.dist-info
