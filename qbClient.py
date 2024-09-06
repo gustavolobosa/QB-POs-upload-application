@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 import json
 import requests
-from future.moves.urllib.parse import urlencode
+from urllib.parse import urlencode
 
 from intuitlib.utils import (
     get_discovery_doc,
@@ -16,7 +16,7 @@ class AuthClient(requests.Session):
     """Handles OAuth 2.0 and OpenID Connect flows to get access to User Info API, Accoutning APIs and Payments APIs
     """
 
-    def __init__(self, client_id, client_secret, redirect_uri, environment, state_token=None, access_token=None, refresh_token=None, id_token=None, realm_id=None):
+    def __init__(self, client_id, client_secret, redirect_uri, environment='sand', state_token=None, access_token=None, refresh_token=None, id_token=None, realm_id=None):
         """Constructor for AuthClient
         
         :param client_id: Client ID found in developer account Keys tab
@@ -39,6 +39,7 @@ class AuthClient(requests.Session):
         self.state_token = state_token
 
         # Discovery doc contains endpoints based on environment specified
+        print("ENV:", self.environment)
         discovery_doc = get_discovery_doc(self.environment, session=self)
         self.auth_endpoint = discovery_doc['authorization_endpoint']
         self.token_endpoint = discovery_doc['token_endpoint']
