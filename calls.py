@@ -1,34 +1,47 @@
 import requests
 import json
 from qbClient import AuthClient
+from dotenv import load_dotenv
 import urllib.parse
 
 # Ruta al archivo de texto plano
-file_path = 'config.txt'
+file_path = '.env'
 
-# Función para cargar las variables de un archivo de texto plano
-def load_variables_from_txt(file_path):
-    variables = {}
-    with open(file_path, 'r') as file:
-        for line in file:
-            if '=' in line:
-                key, value = line.strip().split('=', 1)
-                variables[key] = value
-    return variables
+load_dotenv(dotenv_path=file_path)
 
-# Cargar las variables desde el archivo .txt
-variables = load_variables_from_txt(file_path)
+# # Función para cargar las variables de un archivo de texto plano
+# def load_variables_from_txt(file_path):
+#     variables = {}
+#     with open(file_path, 'r') as file:
+#         for line in file:
+#             if '=' in line:
+#                 key, value = line.strip().split('=', 1)
+#                 variables[key] = value
+#     return variables
+
+# # Cargar las variables desde el archivo .txt
+# variables = load_variables_from_txt(file_path)
 
 # Obtener los valores de las variables de entorno desde el diccionario
+# client_secrets = {
+#     "client_id": variables.get("CLIENT_ID"),
+#     "client_secret": variables.get("CLIENT_SECRET"),
+#     "redirect_uri": variables.get("REDIRECT_URI"),
+#     "environment": variables.get("ENVIRONMENT")
+# }
+
 client_secrets = {
-    "client_id": variables.get("CLIENT_ID"),
-    "client_secret": variables.get("CLIENT_SECRET"),
-    "redirect_uri": variables.get("REDIRECT_URI"),
-    "environment": variables.get("ENVIRONMENT")
+    "client_id": os.getenv("CLIENT_ID"),
+    "client_secret": os.getenv("CLIENT_SECRET"),
+    "redirect_uri": os.getenv("REDIRECT_URI"),
+    "environment": os.getenv("ENVIRONMENT")
 }
 
-realmId = variables.get('REALM_ID')
-authCode = variables.get('AUTH_CODE')
+# realmId = variables.get('REALM_ID')
+# authCode = variables.get('AUTH_CODE')
+
+realmId = os.getenv('REALM_ID')
+authCode = os.getenv('AUTH_CODE')
 
 #print("Client Secrets = ",client_secrets)
 auth_client = AuthClient(**client_secrets)
@@ -55,7 +68,8 @@ def getCustomerData(accessToken):
 import os
 
 def refresh_token():
-    refreshToken = variables.get('REFRESH_TOKEN')  # Usamos el diccionario cargado desde el archivo .txt
+    # refreshToken = variables.get('REFRESH_TOKEN')  # Usamos el diccionario cargado desde el archivo .txt
+    refreshToken = os.getenv('REFRESH_TOKEN')
     response = auth_client.refresh(refresh_token=refreshToken)
     
     # Leer el archivo y cargar las líneas
@@ -75,10 +89,15 @@ def refresh_token():
     print("Tokens actualizados en el archivo config.txt.")
 
     # Actualizar el diccionario `variables` para reflejar los nuevos valores
-    variables['ACCESS_TOKEN'] = response["access_token"]
-    variables['REFRESH_TOKEN'] = response["refresh_token"]
+    # variables['ACCESS_TOKEN'] = response["access_token"]
+    # variables['REFRESH_TOKEN'] = response["refresh_token"]
 
-    return response, variables['ACCESS_TOKEN']
+    # return response, variables['ACCESS_TOKEN']
+    
+    os.environ['ACCESS_TOKEN'] = response["access_token"]
+    os.environ['REFRESH_TOKEN'] = response["refresh_token"]
+
+    return response, os.getenv('ACCESS_TOKEN')
 
 # Suponiendo que ya has cargado las variables usando el método anterior
 
