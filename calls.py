@@ -73,20 +73,20 @@ def refresh_token():
     response = auth_client.refresh(refresh_token=refreshToken)
     
     # Leer el archivo y cargar las líneas
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
+    # with open(file_path, 'r') as file:
+        # lines = file.readlines()
     
     # Actualizar las líneas correspondientes a ACCESS_TOKEN y REFRESH_TOKEN
-    with open(file_path, 'w') as file:
-        for line in lines:
-            if line.startswith('ACCESS_TOKEN='):
-                file.write(f'ACCESS_TOKEN={response["access_token"]}\n')
-            elif line.startswith('REFRESH_TOKEN='):
-                file.write(f'REFRESH_TOKEN={response["refresh_token"]}\n')
-            else:
-                file.write(line)
+    # with open(file_path, 'w') as file:
+    #     for line in lines:
+    #         if line.startswith('ACCESS_TOKEN='):
+    #             file.write(f'ACCESS_TOKEN={response["access_token"]}\n')
+    #         elif line.startswith('REFRESH_TOKEN='):
+    #             file.write(f'REFRESH_TOKEN={response["refresh_token"]}\n')
+    #         else:
+    #             file.write(line)
 
-    print("Tokens actualizados en el archivo config.txt.")
+    # print("Tokens actualizados en el archivo config.txt.")
 
     # Actualizar el diccionario `variables` para reflejar los nuevos valores
     # variables['ACCESS_TOKEN'] = response["access_token"]
