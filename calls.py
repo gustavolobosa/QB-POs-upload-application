@@ -3,6 +3,7 @@ import json
 from qbClient import AuthClient
 from dotenv import load_dotenv
 import urllib.parse
+import os
 
 # Ruta al archivo de texto plano
 file_path = '.env'
@@ -43,7 +44,6 @@ client_secrets = {
 realmId = os.getenv('REALM_ID')
 authCode = os.getenv('AUTH_CODE')
 
-#print("Client Secrets = ",client_secrets)
 auth_client = AuthClient(**client_secrets)
 com_id = realmId
 base_url = 'https://quickbooks.api.intuit.com/v3/company/'
@@ -60,7 +60,7 @@ def getCustomerData(accessToken):
     }
     response = requests.get(url, headers=headers)
 
-    print("Response = ",response)
+    print("Response = ", response)
     #print("Response Data = ",response.text)
 
     print("Success")
@@ -98,9 +98,6 @@ def refresh_token():
     os.environ['REFRESH_TOKEN'] = response["refresh_token"]
 
     return response, os.getenv('ACCESS_TOKEN')
-
-# Suponiendo que ya has cargado las variables usando el método anterior
-
 
 def getVendorByName(accessToken, name):
     
@@ -159,12 +156,10 @@ def getAccountByName(accessToken, name):
 
     return account
 
-
 def getCustomerByName(accessToken, name):
     
     encoded_name = urllib.parse.quote(name)
     
-    # Construir la URL base y los encabezados de autenticación
     auth_header = f'Bearer {accessToken}'
     headers = {
         'Authorization': auth_header,
@@ -177,7 +172,6 @@ def getCustomerByName(accessToken, name):
     endpoint = f"{base_url}{com_id}/query?query=select * from customer where DisplayName='{encoded_name}'&minorversion=73"
     response = requests.get(endpoint, headers=headers)
     
-    # Manejar la respuesta
     if response.status_code == 200:
         data = response.json()
         if 'QueryResponse' in data and 'Customer' in data['QueryResponse']:
@@ -193,7 +187,6 @@ def getClassByName(accessToken, name):
     
     encoded_name = urllib.parse.quote(name)
     
-    # Construir la URL base y los encabezados de autenticación
     auth_header = f'Bearer {accessToken}'
     headers = {
         'Authorization': auth_header,
@@ -206,7 +199,6 @@ def getClassByName(accessToken, name):
     endpoint = f"{base_url}{com_id}/query?query=select * from class where FullyQualifiedName='{encoded_name}'&minorversion=73"
     response = requests.get(endpoint, headers=headers)
     
-    # Manejar la respuesta
     if response.status_code == 200:
         data = response.json()
         if 'QueryResponse' in data and 'Class' in data['QueryResponse']:
@@ -219,7 +211,7 @@ def getClassByName(accessToken, name):
     return clas
 
 def getAllClasses(accessToken):
-    # Construir la URL base y los encabezados de autenticación
+
     auth_header = f'Bearer {accessToken}'
     headers = {
         'Authorization': auth_header,

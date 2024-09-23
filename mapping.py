@@ -30,6 +30,10 @@ project_accounts = {
     "Work In Progress BESS:BESS Sulfur Springs (*)": "02.01.02.07 Pagos Storage",
     "Work In Progress BESS:BESS Thompsonville USA0027B (BEEMAN) - (*)": "02.01.02.07 Pagos Storage",
     "Work In Progress BESS:BESS Watertight": "02.01.02.07 Pagos Storage",
+    "Work In Progress BESS:BESS Sturgeon Pool": "02.01.02.07 Pagos Storage",
+    "Work In Progress BESS:BESS Kerhonkson": "02.01.02.07 Pagos Storage",
+    "Work In Progress BESS:BESS Cobble Hill": "02.01.02.07 Pagos Storage",
+    "Work In Progress BESS:BESS Springville": "02.01.02.07 Pagos Storage",
     
     "Work in Progress DEV": "02.01.02.06 Pagos Desarrollo",
     "Work in Progress DEV:DEV Bay Creek USA0009A (*)": "02.01.02.06 Pagos Desarrollo",

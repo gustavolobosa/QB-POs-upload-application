@@ -62,7 +62,11 @@ def create_category_lines(accessToken, amount, description, categories, class_id
     for cat in categories:
         cat = cat.strip()
         cat_id = map_category_id(cat, accessToken, log_window)
-        customer_id = map_customer_id(project_accounts[cat], accessToken, log_window)
+        if cat in project_accounts:
+            customer_id = map_customer_id(project_accounts[cat], accessToken, log_window)
+        else:
+            log_message(log_window, f"{cat} category not found in proyects accounts, this PO will not be processed \n", 'red')
+            return False
 
         lines.append({
                     "Amount": amount/lines_number,
