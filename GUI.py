@@ -75,14 +75,17 @@ class NumberInputWindow(QMainWindow):
         file_content = self.drop_text_edit.toPlainText()
         
         if not numbers:
-            log_message(self.log_window, "No numbers entered. Please enter at least one number.", 'default')
+            log_message(self.log_window, "No numbers entered. Please enter at least one number.", 'red')
         else:
-            log_message(self.log_window, f"Values entered: {', '.join(numbers)}", 'numbers')
+            log_message(self.log_window, f"Values entered: {', '.join(numbers)}", 'black')
         
         if file_content:
             log_message(self.log_window, f"File content: {file_content}", 'file_path')
-            
-        createPO(self.access_token, numbers, file_content, self.log_window)
+        else:
+            log_message(self.log_window, "No file content found.", 'red')
+        
+        if numbers and file_content:  
+            createPO(self.access_token, numbers, file_content, self.log_window)
         
         
         # Here you can use self.access_token for further actions if needed
