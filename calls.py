@@ -144,6 +144,8 @@ def getAccountByName(accessToken, name):
     endpoint = f"{base_url}{com_id}/query?query=select * from account where FullyQualifiedName='{encoded_name}'&minorversion=73"
     response = requests.get(endpoint, headers=headers)
     
+    print_all(accessToken)
+    
     # Manejar la respuesta
     if response.status_code == 200:
         data = response.json()
@@ -209,6 +211,60 @@ def getClassByName(accessToken, name):
         print(f"Error fetching classes: {response.status_code}, {response.text}")
 
     return clas
+
+def print_all(accessToken):
+    
+    auth_header = f'Bearer {accessToken}'
+    headers = {
+        'Authorization': auth_header,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    # Endpoint para obtener las órdenes de compra (ejemplo)
+    company_id = com_id  # Reemplaza con el ID de tu compañía en QuickBooks
+    
+    endpoint = f'{base_url}{company_id}/query?query=select count(*) from account&minorversion=73'
+    response = requests.get(endpoint, headers=headers)
+
+    # Realizar la solicitud GET
+
+    if response.status_code == 200:
+        count_data = response.json()
+        total_count = count_data['QueryResponse']['totalCount']
+    else:
+        print(f"Error getting count: {response.status_code}, {response.text}")
+        return
+
+    # Paso 2: Obtener vendors en chunks
+    page_size = 1000  # Ajusta el tamaño de página según tus necesidades
+    start_position = 1
+    classes = []
+
+    while start_position <= total_count:
+        endpoint = f'{base_url}{company_id}/query?query=select * from account startposition {start_position} maxresults {page_size}&minorversion=73'
+        response = requests.get(endpoint, headers=headers)
+
+        # Manejar la respuesta
+        if response.status_code == 200:
+            data = response.json()
+            if 'QueryResponse' in data and 'Account' in data['QueryResponse']:
+                chunk_classes = data['QueryResponse']['Account']
+                classes.extend(chunk_classes)
+                start_position += page_size
+            else:
+                print("No more classes found.")
+                break
+        else:
+            print(f"Error fetching classes: {response.status_code}, {response.text}")
+            break
+
+    if classes:
+        for classe in classes:
+            #print(f"\nID: {classe.get('Id')}, Name= '{classe.get('FullyQualifiedName')}'")
+            pass
+    else:
+        print("No classes found.")
 
 def getAllClasses(accessToken):
 
