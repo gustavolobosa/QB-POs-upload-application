@@ -111,7 +111,6 @@ def createPO(accessToken, nums, ruta, log_window):
     for index, fila in df.iterrows():
         
         Purchase_order_dict = fila.to_dict()
-
         if str(Purchase_order_dict['ID']) in nums and Purchase_order_dict['Approval State'] == 'Approved':
             log_message(log_window, f"\nPO number {Purchase_order_dict['ID']} processing\n", 'blue')
             
@@ -174,7 +173,7 @@ def createPO(accessToken, nums, ruta, log_window):
                 else:
                     log_message(log_window, f"PO {Purchase_order_dict['ID']} could not be created\nError: {data.status_code}, {data.text}", 'red')
             
-        elif Purchase_order_dict['ID'] in nums and Purchase_order_dict['Approval State'] != 'Approved':
+        elif str(Purchase_order_dict['ID']) in nums and Purchase_order_dict['Approval State'] != 'Approved':
             log_message(log_window, f"PO {Purchase_order_dict['ID']} is not approved\n", 'red')
     
     # print all POs with their ID and number created
