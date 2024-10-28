@@ -60,8 +60,13 @@ def create_category_lines(accessToken, amount, description, categories, class_id
     log_message(log_window, f"Creating lines for categories:\n")
     lines_number = len(categories)
     for cat in categories:
+        
         cat = cat.strip()
-        cat_id = map_category_id(cat, accessToken, log_window)
+        if "(INACTIVE)" not in cat:
+            cat_id = map_category_id(cat, accessToken, log_window)
+        else:
+            continue
+        
         if cat in project_accounts:
             customer_id = map_customer_id(project_accounts[cat], accessToken, log_window)
         

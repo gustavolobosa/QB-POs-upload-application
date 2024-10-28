@@ -10,36 +10,12 @@ file_path = '.env'
 
 load_dotenv(dotenv_path=file_path)
 
-# # Función para cargar las variables de un archivo de texto plano
-# def load_variables_from_txt(file_path):
-#     variables = {}
-#     with open(file_path, 'r') as file:
-#         for line in file:
-#             if '=' in line:
-#                 key, value = line.strip().split('=', 1)
-#                 variables[key] = value
-#     return variables
-
-# # Cargar las variables desde el archivo .txt
-# variables = load_variables_from_txt(file_path)
-
-# Obtener los valores de las variables de entorno desde el diccionario
-# client_secrets = {
-#     "client_id": variables.get("CLIENT_ID"),
-#     "client_secret": variables.get("CLIENT_SECRET"),
-#     "redirect_uri": variables.get("REDIRECT_URI"),
-#     "environment": variables.get("ENVIRONMENT")
-# }
-
 client_secrets = {
     "client_id": os.getenv("CLIENT_ID"),
     "client_secret": os.getenv("CLIENT_SECRET"),
     "redirect_uri": os.getenv("REDIRECT_URI"),
     "environment": os.getenv("ENVIRONMENT")
 }
-
-# realmId = variables.get('REALM_ID')
-# authCode = variables.get('AUTH_CODE')
 
 realmId = os.getenv('REALM_ID')
 authCode = os.getenv('AUTH_CODE')
@@ -61,7 +37,6 @@ def getCustomerData(accessToken):
     response = requests.get(url, headers=headers)
 
     print("Response = ", response)
-    #print("Response Data = ",response.text)
 
     print("Success")
 
@@ -71,28 +46,6 @@ def refresh_token():
     # refreshToken = variables.get('REFRESH_TOKEN')  # Usamos el diccionario cargado desde el archivo .txt
     refreshToken = os.getenv('REFRESH_TOKEN')
     response = auth_client.refresh(refresh_token=refreshToken)
-    
-    # Leer el archivo y cargar las líneas
-    # with open(file_path, 'r') as file:
-        # lines = file.readlines()
-    
-    # Actualizar las líneas correspondientes a ACCESS_TOKEN y REFRESH_TOKEN
-    # with open(file_path, 'w') as file:
-    #     for line in lines:
-    #         if line.startswith('ACCESS_TOKEN='):
-    #             file.write(f'ACCESS_TOKEN={response["access_token"]}\n')
-    #         elif line.startswith('REFRESH_TOKEN='):
-    #             file.write(f'REFRESH_TOKEN={response["refresh_token"]}\n')
-    #         else:
-    #             file.write(line)
-
-    # print("Tokens actualizados en el archivo config.txt.")
-
-    # Actualizar el diccionario `variables` para reflejar los nuevos valores
-    # variables['ACCESS_TOKEN'] = response["access_token"]
-    # variables['REFRESH_TOKEN'] = response["refresh_token"]
-
-    # return response, variables['ACCESS_TOKEN']
     
     os.environ['ACCESS_TOKEN'] = response["access_token"]
     os.environ['REFRESH_TOKEN'] = response["refresh_token"]
