@@ -20,15 +20,18 @@ def map_vendor_id(vendor_name, accessToken, log_window):
     log_message(log_window, f"{vendor_name} Vendor not found, this PO will not be processed\n", 'red')
     return None
 
-def map_category_id(category_name, accessToken, log_window):
+def map_category_id(category_name, accessToken, log_window, verbose=True):
     
     category = getAccountByName(accessToken, category_name)
     
     if category:
-        log_message(log_window, f"Category ID:  {category['Id']}, Category Name: {category['Name']}")
+        if verbose:
+            log_message(log_window, f"Category ID:  {category['Id']}, Category Name: {category['Name']}")
         return category['Id']
+    
+    if verbose: 
+        log_message(log_window, f"{category_name} Category not found, this PO will not be processed", 'red')
         
-    log_message(log_window, f"{category_name} Category not found, this PO will not be processed", 'red')
     return None
 
 def map_customer_id(customer_name, accessToken, log_window):
@@ -58,7 +61,15 @@ def create_category_lines(accessToken, amount, description, categories, class_id
     lines = []
     
     log_message(log_window, f"Creating lines for categories:\n")
-    lines_number = len(categories)
+    lines_number = 0
+    
+    for cat in categories:
+        cat = cat.strip()
+        cat_id = map_category_id(cat, accessToken, log_window, False)
+        
+        if "(INACTIVE)" not in cat and cat_id is not None:
+            lines_number += 1
+    
     for cat in categories:
         
         cat = cat.strip()

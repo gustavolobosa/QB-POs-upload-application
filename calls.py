@@ -49,6 +49,17 @@ def refresh_token():
     
     os.environ['ACCESS_TOKEN'] = response["access_token"]
     os.environ['REFRESH_TOKEN'] = response["refresh_token"]
+    
+    with open(file_path, 'w') as env_file:
+        env_file.write(f"CLIENT_ID={os.getenv('CLIENT_ID')}\n")
+        env_file.write(f"CLIENT_SECRET={os.getenv('CLIENT_SECRET')}\n")
+        env_file.write(f"REDIRECT_URI={os.getenv('REDIRECT_URI')}\n")
+        env_file.write(f"ENVIRONMENT={os.getenv('ENVIRONMENT')}\n")
+        env_file.write(f"REALM_ID={os.getenv('REALM_ID')}\n")
+        env_file.write(f"AUTH_CODE={os.getenv('AUTH_CODE')}\n")
+        env_file.write(f"ACCESS_TOKEN={response['access_token']}\n")
+        env_file.write(f"REFRESH_TOKEN={response['refresh_token']}\n")
+
 
     return response, os.getenv('ACCESS_TOKEN')
 
